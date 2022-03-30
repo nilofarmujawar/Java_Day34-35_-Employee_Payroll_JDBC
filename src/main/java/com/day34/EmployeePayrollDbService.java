@@ -52,10 +52,14 @@ public class EmployeePayrollDbService {
     }
 
     private int updateEmployeeDataUsingPreparedStatement(String name, Double salary) {
-        String sql = String.format("update employee_payroll set salary = %.2f where name='%s';", salary, name);
+
         try (Connection connection = this.getConnection();) {
-            PreparedStatement prepareStatement = connection.prepareStatement(sql);
-            return prepareStatement.executeUpdate(sql);
+            String sql = "update employee_payroll set salary = ? where name=?;";
+            PreparedStatement preparestatement = connection.prepareStatement(sql);
+            preparestatement.setDouble(1, salary);
+            preparestatement.setString(2, name);
+            int update = preparestatement.executeUpdate();
+            return update;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -103,7 +107,7 @@ public class EmployeePayrollDbService {
     }
 
     public List<EmployeePayrollData> getEmployeeForDateRange(LocalDate startDate, LocalDate endDate) {
-        String sql = String.format("SELECT * FROM employee_payroll2 WHERE START BETWEEN '%s' AND '%s';",
+        String sql = String.format("SELECT * FROM employee_payroll WHERE START BETWEEN '%s' AND '%s';",
                 Date.valueOf(startDate), Date.valueOf(endDate));
         return this.getEmployeePayrollDataUsingDB(sql);
     }
@@ -120,6 +124,7 @@ public class EmployeePayrollDbService {
         }
         return employeePayrollList;
     }
+
     /**
      *  create a method name as getConnection
      * @return connection
@@ -148,6 +153,7 @@ public class EmployeePayrollDbService {
          */
         return connection;
     }
+
     public Map<String, Double> get_AverageSalary_ByGender() {
         String sql = "SELECT gender,AVG(salary) as avg_salary FROM employee_payroll GROUP BY gender;";
         Map<String, Double> genderToAverageSalaryMap = new HashMap<>();
@@ -233,4 +239,76 @@ public class EmployeePayrollDbService {
         return genderToCountMap;
     }
 
+    public EmployeePayrollData addEmployeeToPayroll(String name, double salary, LocalDate start, String gender) {
+        int employeeId = -1;
+        EmployeePayrollData employee_payroll_Data = null;
+        String sql = String.format("INSERT INTO employee_payroll(name,gender,salary,start) values('%s','%s','%s','%s')",
+                name, gender, salary, Date.valueOf(start));
+        try (Connection connection = this.getConnection()) {
+            Statement statement = connection.createStatement();
+            int rowAffected = statement.executeUpdate(sql, statement.RETURN_GENERATED_KEYS);
+            if (rowAffected == 1) {
+                ResultSet resultSet = statement.getGeneratedKeys();
+                if (resultSet.next())
+                    employeeId = resultSet.getInt(1);
+            }
+            employee_payroll_Data = new EmployeePayrollData(employeeId, name, salary, start);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return employee_payroll_Data;
+    }
+
+    public EmployeePayrollData addEmployeeToPayrollUC8(String name, double salary, LocalDate startDate,
+                                                         String gender) {
+        int employeeId = -1;
+        Connection connection = null;
+        EmployeePayrollData employee_payroll_Data = null;
+        try {
+            connection = this.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try (Statement statement = connection.createStatement()) {
+            String sql = String.format(
+                    "INSERT INTO employee_payroll(name,gender,salary,start) " + "values('%s','%s','%s','%s')", name,
+                    gender, salary, Date.valueOf(startDate));
+            int rowAffected = statement.executeUpdate(sql, statement.RETURN_GENERATED_KEYS);
+            if (rowAffected == 1) {
+                ResultSet resultSet = statement.getGeneratedKeys();
+                if (resultSet.next())
+                    employeeId = resultSet.getInt(1);
+            }
+            employee_payroll_Data = new EmployeePayrollData(employeeId, name, salary, startDate);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try (Statement statement = connection.createStatement()) {
+            double deductions = salary * 0.2;
+            double taxablePay = salary - deductions;
+            double tax = taxablePay * 0.1;
+            double netPay = salary - tax;
+            String sql = String.format(
+                    "INSERT INTO payroll_details(id,basic_pay,deductions,taxable_pay,tax,net_pay) "
+                            + "values(%s , %s , %s , %s , %s , %s)",
+                    employeeId, salary, deductions, taxablePay, tax, netPay);
+            int rowAffected = statement.executeUpdate(sql);
+            if (rowAffected == 1) {
+
+                employee_payroll_Data = new EmployeePayrollData(employeeId, name, salary, startDate);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return employee_payroll_Data;
+    }
 }
