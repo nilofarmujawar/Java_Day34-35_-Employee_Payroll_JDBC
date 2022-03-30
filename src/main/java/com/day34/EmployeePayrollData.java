@@ -17,6 +17,7 @@ public class EmployeePayrollData {
     public String name;
     public double salary;
     public LocalDate startDate;
+    public String gender;
 
     /**
      * create parameterized constructor name as EmployeePayrollData
@@ -43,13 +44,26 @@ public class EmployeePayrollData {
     }
 
     /**
+     * Create a constructor name as EmployeePayrollData, this is parameterized constructor
+     * @param id employee id
+     * @param name employee name
+     * @param salary employee salary
+     * @param startDate of salary
+     * @param gender employee gender
+     */
+    public EmployeePayrollData(int id, String name, double salary, LocalDate startDate,String gender) {
+        this(id, name, salary,startDate);
+        this.gender=gender;
+    }
+
+    /**
      * overiding method
      * @return id, name , salary
      */
     @Override
     public String toString() {
         return "Employee_payroll_Data [id=" + id + ", name=" + name + ", salary=" + salary + ", startDate=" + startDate
-                + "]";
+                + ",gender=" + gender + "]";
     }
 
     /**
