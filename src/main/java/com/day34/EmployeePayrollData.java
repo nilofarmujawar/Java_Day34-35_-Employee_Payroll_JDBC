@@ -16,68 +16,78 @@ public class EmployeePayrollData {
     public int id;
     public String name;
     public double salary;
-    public LocalDate startDate;
+    public LocalDate start;
     public String gender;
+    public String companyName;
+    public int companyId;
+    public String department[];
 
-    /**
-     * create parameterized constructor name as EmployeePayrollData
-     * @param id is employee
-     * @param name is employee
-     * @param salary is employee
-     */
-    public  EmployeePayrollData(int id, String name, double salary) {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
+    }
+
+    public String[] getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String[] department) {
+        this.department = department;
+    }
+
+
+    public EmployeePayrollData (int id, String name, double salary) {
         this.id = id;
         this.name = name;
         this.salary = salary;
     }
 
-    /**
-     * Create a constructor name as EmployeePayrollData, this is parameterized constructor
-     * @param id is employee
-     * @param name is employee
-     * @param salary is employee
-     * @param startDate of salary
-     */
-    public  EmployeePayrollData(int id, String name, double salary, LocalDate startDate) {
+    public EmployeePayrollData (int id, String name, double salary, LocalDate start) {
         this(id, name, salary);
-        this.startDate = startDate;
+        this.start = start;
     }
 
-    /**
-     * Create a constructor name as EmployeePayrollData, this is parameterized constructor
-     * @param id employee id
-     * @param name employee name
-     * @param salary employee salary
-     * @param startDate of salary
-     * @param gender employee gender
-     */
-    public EmployeePayrollData(int id, String name, double salary, LocalDate startDate,String gender) {
-        this(id, name, salary,startDate);
-        this.gender=gender;
+    public EmployeePayrollData (int id, String name, double salary, LocalDate start, String gender) {
+        this(id, name, salary, start);
+        this.gender = gender;
     }
 
-    /**
-     * overiding method
-     * @return id, name , salary
-     */
+    public EmployeePayrollData (int id, String name, double salary, LocalDate start, String gender, String companyName,
+                                 int companyId, String[] department) {
+        this.id = id;
+        this.name = name;
+        this.salary = salary;
+        this.start = start;
+        this.gender = gender;
+        this.companyName = companyName;
+        this.companyId = companyId;
+        this.department = department;
+    }
+
     @Override
     public String toString() {
-        return "Employee_payroll_Data [id=" + id + ", name=" + name + ", salary=" + salary + ", startDate=" + startDate
-                + ",gender=" + gender + "]";
+        return "Employee_payroll_Data [id=" + id + ", name=" + name + ", salary=" + salary + ", startDate=" + start
+                + "]";
     }
 
-    /**
-     * overide equal method
-     * @param obj of employee
-     * @return employee id name and salary
-     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
         if (obj == null || getClass() != obj.getClass())
             return false;
-        EmployeePayrollData emp_payroll = (EmployeePayrollData) obj;
-        return id == emp_payroll.id && Double.compare(emp_payroll.salary, salary) == 0 && name.equals(emp_payroll.name);
+        EmployeePayrollData that = (EmployeePayrollData ) obj;
+        return id == that.id  &&  Double.compare(that.salary, salary) == 0 && name.equals(that.name);
     }
 }

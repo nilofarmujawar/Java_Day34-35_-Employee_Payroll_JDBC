@@ -239,9 +239,9 @@ public class EmployeePayrollDbService {
         return genderToCountMap;
     }
 
-    public EmployeePayrollData addEmployeeToPayroll(String name, double salary, LocalDate start, String gender) {
+    public Employee_payroll_Data addEmployeeToPayroll(String name, double salary, LocalDate start, String gender) {
         int employeeId = -1;
-        EmployeePayrollData employee_payroll_Data = null;
+        Employee_payroll_Data employee_payroll_Data = null;
         String sql = String.format("INSERT INTO employee_payroll(name,gender,salary,start) values('%s','%s','%s','%s')",
                 name, gender, salary, Date.valueOf(start));
         try (Connection connection = this.getConnection()) {
@@ -252,18 +252,18 @@ public class EmployeePayrollDbService {
                 if (resultSet.next())
                     employeeId = resultSet.getInt(1);
             }
-            employee_payroll_Data = new EmployeePayrollData(employeeId, name, salary, start);
+            employee_payroll_Data = new Employee_payroll_Data(employeeId, name, salary, start);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return employee_payroll_Data;
     }
 
-    public EmployeePayrollData addEmployeeToPayrollUC8(String name, double salary, LocalDate startDate,
+    public Employee_payroll_Data addEmployeeToPayrollUC8(String name, double salary, LocalDate startDate,
                                                          String gender) {
         int employeeId = -1;
         Connection connection = null;
-        EmployeePayrollData employee_payroll_Data = null;
+        Employee_payroll_Data employee_payroll_Data = null;
         try {
             connection = this.getConnection();
         } catch (SQLException e) {
@@ -279,7 +279,7 @@ public class EmployeePayrollDbService {
                 if (resultSet.next())
                     employeeId = resultSet.getInt(1);
             }
-            employee_payroll_Data = new EmployeePayrollData(employeeId, name, salary, startDate);
+            employee_payroll_Data = new Employee_payroll_Data(employeeId, name, salary, startDate);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -296,7 +296,7 @@ public class EmployeePayrollDbService {
             int rowAffected = statement.executeUpdate(sql);
             if (rowAffected == 1) {
 
-                employee_payroll_Data = new EmployeePayrollData(employeeId, name, salary, startDate);
+                employee_payroll_Data = new Employee_payroll_Data(employeeId, name, salary, startDate);
             }
         } catch (SQLException e) {
             e.printStackTrace();
