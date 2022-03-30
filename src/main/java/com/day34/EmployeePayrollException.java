@@ -15,10 +15,11 @@ public class EmployeePayrollException extends Exception {
      * this data is constant
      */
     public enum Exception {
-        DATA_NULL
+        DATA_NULL,INSERTION_FAILED
     }
 
     public Exception type;
+
 
     /**
      * create a parameterized constructor name as EmployeePayrollException
