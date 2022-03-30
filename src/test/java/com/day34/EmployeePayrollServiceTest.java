@@ -3,6 +3,7 @@ package com.day34;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -54,7 +55,18 @@ public class EmployeePayrollServiceTest {
         Assert.assertFalse(result);
         System.out.println(employeePayrollData);
     }
-
+    @Test
+    public void givenDateRange_WhenRetrieved_ShouldMatchEmployeeCount() {
+        EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+        employeePayrollService.readEmployeepayrollData(EmployeePayrollService.IOService.DB_IO);
+        LocalDate startDate = LocalDate.of(2018, 01, 01);
+        LocalDate endDate = LocalDate.now();
+        List<EmployeePayrollData> employeePayrollData = employeePayrollService
+                .readPayrollDataForRange(EmployeePayrollService.IOService.DB_IO, startDate, endDate);
+        Assert.assertEquals(3, employeePayrollData.size());
+    }
 }
+
+
 
 

@@ -24,7 +24,7 @@ public class EmployeePayrollData {
      * @param name is employee
      * @param salary is employee
      */
-    public EmployeePayrollData(int id, String name, double salary) {
+    public  EmployeePayrollData(int id, String name, double salary) {
         this.id = id;
         this.name = name;
         this.salary = salary;
@@ -37,7 +37,7 @@ public class EmployeePayrollData {
      * @param salary is employee
      * @param startDate of salary
      */
-    public EmployeePayrollData(int id, String name, double salary, LocalDate startDate) {
+    public  EmployeePayrollData(int id, String name, double salary, LocalDate startDate) {
         this(id, name, salary);
         this.startDate = startDate;
     }
@@ -48,7 +48,8 @@ public class EmployeePayrollData {
      */
     @Override
     public String toString() {
-        return "id =" + id + ",name =" + name + ",salary =" + salary;
+        return "Employee_payroll_Data [id=" + id + ", name=" + name + ", salary=" + salary + ", startDate=" + startDate
+                + "]";
     }
 
     /**

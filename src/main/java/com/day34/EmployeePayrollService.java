@@ -6,6 +6,7 @@ package com.day34;
  * import scanner class
  */
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -28,7 +29,7 @@ public class EmployeePayrollService {
     /**
      * create a list
      */
-    public List<EmployeePayrollData> employeePayrollList;
+    public List< EmployeePayrollData> employeePayrollList;
     private EmployeePayrollDbService employeePayrollDBService;
 
     /**
@@ -37,7 +38,6 @@ public class EmployeePayrollService {
     public EmployeePayrollService() {
         employeePayrollDBService = EmployeePayrollDbService.getInstance();
     }
-
     /**
      * create a parameterized constructor name as EmployeePayrollService
      */
@@ -45,6 +45,7 @@ public class EmployeePayrollService {
         this();
         this.employeePayrollList = employeePayrollList;
     }
+
 
     /**
      * create a method name as readEmployeeData
@@ -57,7 +58,7 @@ public class EmployeePayrollService {
         String name = consoleInputReader.nextLine();
         System.out.println("Enter employee salary : ");
         double salary = Double.parseDouble(consoleInputReader.nextLine());
-        employeePayrollList.add(new EmployeePayrollData(id, name, salary));
+        employeePayrollList.add(new  EmployeePayrollData(id, name, salary));
     }
 
     /**
@@ -70,6 +71,21 @@ public class EmployeePayrollService {
         else if (ioService.equals(IOService.FILE_IO))
             new EmployeePayrollFileIOService().writeData(employeePayrollList);
     }
+
+    /**
+     * create a method name as readPayrollDataForRange,this is parameterized method
+     * @param ioService
+     * @param startDate
+     * @param endDate
+     * @return employeePayrollList
+     */
+    public List< EmployeePayrollData> readPayrollDataForRange(IOService ioService, LocalDate startDate,
+                                                               LocalDate endDate) {
+        if (ioService.equals(IOService.DB_IO))
+            this.employeePayrollList = employeePayrollDBService.readData();
+        return employeePayrollList;
+    }
+
     /**
      * create a method name as printData,
      * this is parameterized method
@@ -96,7 +112,7 @@ public class EmployeePayrollService {
      * @param ioService
      * @return read data
      */
-    public List<EmployeePayrollData> readEmployeepayrollData(IOService ioService) {
+    public List< EmployeePayrollData> readEmployeepayrollData(IOService ioService) {
         if (ioService.equals(IOService.FILE_IO))
             return new EmployeePayrollFileIOService().readData();
         else if (ioService.equals(IOService.DB_IO))
@@ -126,7 +142,7 @@ public class EmployeePayrollService {
      * @param name of employee
      * @return employeePayrollData
      */
-    private EmployeePayrollData getEmployee_payroll_Data(String name) {
+    private  EmployeePayrollData getEmployee_payroll_Data(String name) {
         EmployeePayrollData employeePayrollData;
         employeePayrollData = employeePayrollList.stream().filter(emp_Data -> emp_Data.name.equals(name)).findFirst()
                 .orElse(null);
@@ -140,7 +156,7 @@ public class EmployeePayrollService {
      * @return name of employee
      */
     public boolean checkEmployeePayrollInSyncWithDB(String name) {
-        List<EmployeePayrollData> employeePayrollDataList = employeePayrollDBService.getEmployeePayrollData(name);
+        List< EmployeePayrollData> employeePayrollDataList = employeePayrollDBService.getEmployeePayrollData(name);
         return employeePayrollDataList.get(0).equals(getEmployee_payroll_Data(name));
     }
 
