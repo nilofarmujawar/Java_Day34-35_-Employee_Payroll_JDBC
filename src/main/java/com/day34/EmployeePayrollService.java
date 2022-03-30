@@ -46,7 +46,6 @@ public class EmployeePayrollService {
         this.employeePayrollList = employeePayrollList;
     }
 
-
     /**
      * create a method name as readEmployeeData
      * @param consoleInputReader
@@ -69,16 +68,15 @@ public class EmployeePayrollService {
         if (ioService.equals(IOService.CONSOLE_IO))
             System.out.println("Employee Payroll Data to Console\n" + employeePayrollList);
         else if (ioService.equals(IOService.FILE_IO))
-            new  EmployeePayrollFileIOService().writeData(employeePayrollList);
+            new EmployeePayrollFileIOService().writeData(employeePayrollList);
     }
-
     /**
      * create a method name as printData,
      * this is parameterized method
      * @param ioService
      */
     public void printData(IOService ioService) {
-        new  EmployeePayrollFileIOService().printData();
+        new EmployeePayrollFileIOService().printData();
     }
 
     /**
@@ -114,7 +112,7 @@ public class EmployeePayrollService {
      * @throws EmployeePayrollException
      * @throws NullPointerException
      */
-    public void updateEmployeeSalary(String name, double salary) throws EmployeePayrollException, NullPointerException {
+    public void updateEmployeeSalary(String name, double salary) throws EmployeePayrollException {
         int result = employeePayrollDBService.updateEmployeeData(name, salary);
         if (result == 0)
             throw new EmployeePayrollException(Exception.DATA_NULL, "No data update is failed");
@@ -145,6 +143,7 @@ public class EmployeePayrollService {
         List<EmployeePayrollData> employeePayrollDataList = employeePayrollDBService.getEmployeePayrollData(name);
         return employeePayrollDataList.get(0).equals(getEmployee_payroll_Data(name));
     }
+
 
     /**
      * create a main method,all program execute in main method

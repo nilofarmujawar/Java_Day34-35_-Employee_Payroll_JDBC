@@ -21,9 +21,7 @@ import java.util.List;
  * create a class name as EmployeePayrollDbService
  */
 public class EmployeePayrollDbService {
-    /**
-     * variables
-     */
+
     private PreparedStatement employeePayrollDataStatement;
     private static EmployeePayrollDbService employeePayrollDBService;
 
@@ -34,8 +32,7 @@ public class EmployeePayrollDbService {
     }
 
     /**
-     * create a method name as getInstance
-     * @return employeePayrollDBService
+     * create default constructor name as EmployeePayrollDbService
      */
     public static EmployeePayrollDbService getInstance() {
         if (employeePayrollDBService == null)
@@ -54,7 +51,6 @@ public class EmployeePayrollDbService {
          * EmployeePayrollData is a class
          */
         List<EmployeePayrollData> employeePayrollList = new ArrayList<EmployeePayrollData>();
-
         /**
          * Connection :-
          * A Connection object's database is able to provide information describing its tables,
@@ -85,8 +81,8 @@ public class EmployeePayrollDbService {
      * @param salary of employee
      * @return update data using statment name and salary
      */
-    public int updateEmployeeData(String name, double salary) {
-        return this.updateDataUsingStatement(name, salary);
+    public int updateEmployeeData(String name, Double salary) {
+        return this.updateEmployeeDataUsingPreparedStatement(name, salary);
     }
 
     /**
@@ -95,11 +91,11 @@ public class EmployeePayrollDbService {
      * @param salary of employee
      * @return sql update statement
      */
-    private int updateDataUsingStatement(String name, double salary) {
-        String sql = String.format("UPDATE employee_payroll SET salary = %.2f where name = '%s';", salary, name);
+    private int updateEmployeeDataUsingPreparedStatement(String name, Double salary) {
+        String sql = String.format("update employee_payroll set salary = %.2f where name='%s';", salary, name);
         try (Connection connection = this.getConnection();) {
-            Statement statement = connection.createStatement();
-            return statement.executeUpdate(sql);
+            PreparedStatement prepareStatement = connection.prepareStatement(sql);
+            return prepareStatement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -146,10 +142,10 @@ public class EmployeePayrollDbService {
     private List<EmployeePayrollData> getEmployeePayrollData(ResultSet resultSet) {
         List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
         try {
-            /**
-             * columnLable is id, name, salary,start
-             */
             while (resultSet.next()) {
+                /**
+                 * columnLable is id, name, salary,start
+                 */
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
                 double salary = resultSet.getDouble("salary");
@@ -161,6 +157,7 @@ public class EmployeePayrollDbService {
         }
         return employeePayrollList;
     }
+
     /**
      *  create a method name as getConnection
      * @return connection
