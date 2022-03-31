@@ -158,9 +158,17 @@ public class EmployeePayrollServiceTest {
         Assert.assertTrue(result);
     }
 
-
+    //UC12
+    @Test
+    public void givenEmployeePayrollData_ShouldReturn_ActiveEmployees() {
+        EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+        employeePayrollService.readEmployeepayrollData(EmployeePayrollService.IOService.DB_IO);
+        List<EmployeePayrollData> employeePayrollData = employeePayrollService
+                .readPayrollDataForActiveEmployees(EmployeePayrollService.IOService.DB_IO);
+        System.out.println(employeePayrollData);
+        Assert.assertEquals(5, employeePayrollData.size());
+    }
 }
-
 
 
 
